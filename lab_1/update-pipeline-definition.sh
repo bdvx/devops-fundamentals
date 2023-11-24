@@ -15,18 +15,18 @@ checkJQ() {
   type jq >/dev/null 2>&1
   exitCode=$?
 
-  if [ "$exitCode" -ne 0 ]; then
+  if [[ "$exitCode" -ne 0 ]]; then
     printf "  ${red}'jq' not found! (json parser)\n${end}"
     printf "    Ubuntu Installation: sudo apt install jq\n"
     printf "    Redhat Installation: sudo yum install jq\n"
     jqDependency=0
   else
-    if [ "$DEBUG" -eq 1 ]; then
+    if [[ "$DEBUG" -eq 1 ]]; then
       printf "  ${grn}'jq' found!\n${end}"
     fi
   fi
 
-  if [ "$jqDependency" -eq 0 ]; then
+  if [[ "$jqDependency" -eq 0 ]]; then
     printf "${red}Missing 'jq' dependency, exiting.\n${end}"
     exit 1
   fi
@@ -51,8 +51,8 @@ echo -n "Enter a source branch to use (default: $defaultBranchName): "
 read -r branchName
 branchName=${branchName:-$defaultBranchName}
 
-echo "Pipeline name: ${pipelineName}"
-echo "Branch name: ${branchName}"
+echo "Pipeline Name: ${pipelineName}"
+echo "Branch Name: ${branchName}"
 
 pipelineJson="pipeline.json"
 
@@ -64,24 +64,24 @@ jq --arg branchName "$branchName" '.pipeline.stages[0].actions[0].configuration.
 # remove metadata
 jq 'del(.metadata)' "$pipelineJson" > tmp.$$.json && mv tmp.$$.json "$pipelineJson"
 
-defaultProceedOpt="y"
+#defaultProceedOpt="y"
 #
-cat "$pipelineJson"
-echo -n "Proceed with ${pipelineName} pipeline update (y/n) (default: $defaultProceedOpt): "
-read -r doProceed
+#cat "$pipelineJson"
+#echo -n "Proceed with ${pipelineName} pipeline update (y/n) (default: $defaultProceedOpt): "
+#read -r doProceed
 #
-doProceed=${doProceed:-$defaultProceedOpt}
+#doProceed=${doProceed:-$defaultProceedOpt}
 #
-if [ "$doProceed" = "n" ]; then
-  echo "The ${pipelineName} pipeline update has been terminated."
-  exit 0
-fi
+#if [ "$doProceed" = "n" ]; then
+#  echo "The ${pipelineName} pipeline update has been terminated."
+#  exit 0
+#fi
 
 # update pipeline
 #aws codepipeline update-pipeline --cli-input-json "file://${pipelineJson}"
 
 #echo -n "The ${pipelineName} pipeline has been updated successfully."
-
+#
 #echo -n "Trigger the ${pipelineName} pipeline execution (y/n) (default: n):"
 #read -r doExecute
 
